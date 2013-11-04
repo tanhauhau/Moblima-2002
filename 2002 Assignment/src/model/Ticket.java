@@ -1,51 +1,46 @@
 package model;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import model.cinema.seat.Seat;
+import model.customer.Customer;
+import model.showtime.ShowTime;
 
 public class Ticket {
 	private String id;
-	private String name;
-	private String mobileNumber;
-	private String emailAddress;
+	private Customer customer;
 	private Double price;
+	private ShowTime showTime; 
+	private final static double STANDARD_PRICE = 8.0;
 
-	public static Ticket generateTicket(Cinema cinema, Date time, String name, String mobileNumber,
-			String emailAddress, Double price){
+	public static Ticket generateTicket(ShowTime showtime, Customer customer, Seat seat){
 		SimpleDateFormat simpleFormatter = new SimpleDateFormat("yyyyMMddhhmm");
-		return new Ticket(simpleFormatter.format(time) + cinema.getCode(), name, mobileNumber, emailAddress, price);
+		return new Ticket(showtime.getMovie().getCode() + simpleFormatter.format(showtime.getStartTime()), 
+				showtime, customer, 
+				STANDARD_PRICE * showtime.getPriceRate() * showtime.getCinema().getPriceRate() * customer.getPriceRate() * seat.getPriceRate());
 	}
 	
-	private Ticket(String id, String name, String mobileNumber,
-			String emailAddress, Double price) {
+	private Ticket(String id, ShowTime showTime, Customer customer, Double price) {
 		this.id = id;
-		this.name = name;
-		this.mobileNumber = mobileNumber;
-		this.emailAddress = emailAddress;
 		this.price = price;
+		this.customer = customer;
+		this.showTime = showTime;
 	}
 
 	public String getId() {
 		return id;
 	}
 
-	public String getName() {
-		return name;
+	public Customer getCustomer() {
+		return customer;
 	}
-
-	public String getMobileNumber() {
-		return mobileNumber;
-	}
-
-	public String getEmailAddress() {
-		return emailAddress;
-	}
-
 	public Double getPrice() {
 		return price;
 	}
-	
+	public ShowTime getShowTime() {
+		return showTime;
+	}
 	public String toString(){
-		return String.format("<Ticket: %s Name: %s, Mobile: %s, Email: %s, Price: %f>", getId(), getName(), getMobileNumber(), getEmailAddress(), getPrice());
+		return String.format("<Ticket: %s Name: %s, Mobile: %s, Email: %s, Price: %f>", getId(), customer.getName(), customer.getMobileNumber(), customer.getEmailAddress(), getPrice());
 	}
 }

@@ -1,4 +1,4 @@
-package model;
+package model.movie;
 
 public enum Genre {
 	COMEDY, 

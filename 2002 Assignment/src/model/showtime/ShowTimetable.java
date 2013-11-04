@@ -1,7 +1,9 @@
-package model;
+package model.showtime;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import model.cinema.Cinema;
 /**
  * A list of showtime
  * @author Tan Li Hau
@@ -24,8 +26,11 @@ public class ShowTimetable {
 	public void removeDayShowTime(DayShowTime day){
 		days.remove(day);
 	}
-	public ArrayList<DayShowTime> getShowTimes(){
+	public ArrayList<DayShowTime> getDayShowTimes(){
 		return days;
+	}
+	public ShowTime[] getShowTimes(int day){
+		return days.get(day).getShowTimes();
 	}
 	public ShowTime getShowTime(int day, int time){
 		return days.get(day).getShowTime(time);

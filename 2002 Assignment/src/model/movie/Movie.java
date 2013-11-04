@@ -1,8 +1,11 @@
-package model;
+package model.movie;
 
 import java.util.ArrayList;
 
+import model.showtime.ShowTime;
+
 public class Movie {
+	private String code;
 	private String title;
 	private String description;
 	private Genre genre;
@@ -12,8 +15,9 @@ public class Movie {
 	private double priceRate;
 	private ArrayList<ShowTime> showTimes;
 	
-	public Movie(String title, String description, Genre genre,
+	public Movie(String code, String title, String description, Genre genre,
 			Language language, int rating, Status status) {
+		this.code = code;
 		this.title = title;
 		this.description = description;
 		this.genre = genre;
@@ -22,8 +26,8 @@ public class Movie {
 		this.status = status;
 		this.priceRate = 1.0;
 		showTimes = new ArrayList<ShowTime>();
+		
 	}
-	
 
 	public String getTitle() {
 		return title;
@@ -76,6 +80,14 @@ public class Movie {
 	public double getPriceRate() {
 		return priceRate;
 	}
+	
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public String getCode() {
+		return code;
+	}
+	
 	public void addShowTime(ShowTime showTime){
 		showTimes.add(showTime);
 	}

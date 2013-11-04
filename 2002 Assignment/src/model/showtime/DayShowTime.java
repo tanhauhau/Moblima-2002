@@ -1,7 +1,9 @@
-package model;
+package model.showtime;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import model.cinema.Cinema;
 
 public class DayShowTime {
 	private ShowTime[] shows;
@@ -9,7 +11,7 @@ public class DayShowTime {
 	public DayShowTime(Cinema cinema, Date day) {
 		this.cinema = cinema;
 		shows = new ShowTime[12];
-		
+
 		Calendar c = Calendar.getInstance();
 		c.setTime(day);
 		for (int i = 0; i < 12; i++) {
@@ -26,5 +28,8 @@ public class DayShowTime {
 	}
 	public ShowTime[] getShowTimes(){
 		return shows;
+	}
+	public Cinema getCinema() {
+		return cinema;
 	}
 }
