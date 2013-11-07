@@ -277,7 +277,7 @@ public class CinemaApp {
 	public Ticket purchaseSeat(ShowTime showtime, int seatIndex) throws SeatOccupiedException, UserNotLoggedInException, IndexOutOfBoundsException{
 		SeatAllocation seatAlloc = showtime.getSeatAllocations(); 
 		Seat seat = seatAlloc.getAllSeats()[seatIndex];
-		Ticket ticket = Ticket.generateTicket(showtime, User.getCurrentUser(), seat);
+		Ticket ticket = Ticket.generateTicket(showtime, User.getCurrentCustomer(), seat);
 		seatAlloc.purchaseSeat(seat, ticket);
 		return ticket;
 	}

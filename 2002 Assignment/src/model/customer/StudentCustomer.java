@@ -1,13 +1,8 @@
 package model.customer;
 
 public class StudentCustomer extends Customer{
-	
-	private final double priceRate = 0.7;
-	
-	public StudentCustomer(String name, String mobileNumber, String emailAddress) {
-		super(name, mobileNumber, emailAddress);
-	}
-	public double getPriceRate() {
-		return priceRate;
+	protected StudentCustomer(String name, String mobileNumber, String emailAddress, int age) {
+		super(name, mobileNumber, emailAddress, age);
+		priceRate = 0.7;
 	}
 }
