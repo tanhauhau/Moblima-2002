@@ -22,7 +22,6 @@ public class CinemaApp {
 	protected ArrayList<Cineplex> cineplexList;
 	
 	public CinemaApp() {
-		User.initialize();
 		movieList = new ArrayList<Movie>();
 		cineplexList = new ArrayList<Cineplex>();
 	}
