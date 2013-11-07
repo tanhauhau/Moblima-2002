@@ -8,8 +8,10 @@ import model.cinema.Cinema;
 public class DayShowTime {
 	private ShowTime[] shows;
 	private Cinema cinema;
+	private Date day;
 	public DayShowTime(Cinema cinema, Date day) {
 		this.cinema = cinema;
+		this.day = day;
 		shows = new ShowTime[12];
 
 		Calendar c = Calendar.getInstance();
@@ -31,5 +33,8 @@ public class DayShowTime {
 	}
 	public Cinema getCinema() {
 		return cinema;
+	}
+	public Date getDay() {
+		return day;
 	}
 }

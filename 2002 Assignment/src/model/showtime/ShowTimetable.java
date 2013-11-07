@@ -20,11 +20,28 @@ public class ShowTimetable {
 	public DayShowTime createDayShowTime(Date day){
 		return new DayShowTime(cinema, day);
 	}
+	public DayShowTime addDayShowTime(Date day){
+		DayShowTime d;
+		if((d = getDayShowTime(day)) != null){
+			return d;
+		}
+		d = createDayShowTime(day);
+		addDayShowTime(day);
+		return d;
+	}
 	public void addDayShowTime(DayShowTime day){
 		days.add(day);
 	}
 	public void removeDayShowTime(DayShowTime day){
 		days.remove(day);
+	}
+	public DayShowTime getDayShowTime(Date day){
+		for (DayShowTime d : days) {
+			if(d.getDay().equals(day)){
+				return d;
+			}
+		}
+		return null;
 	}
 	public ArrayList<DayShowTime> getDayShowTimes(){
 		return days;

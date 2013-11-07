@@ -40,6 +40,7 @@ public class Seat {
 		return seatId;
 	}
 	public static class SeatOccupiedException extends Exception{
+		private static final long serialVersionUID = 1L;
 		public SeatOccupiedException() {
 		}
 		@Override
