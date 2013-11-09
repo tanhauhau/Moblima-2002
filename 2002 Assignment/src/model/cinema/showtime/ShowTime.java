@@ -1,6 +1,5 @@
-package model.showtime;
+package model.cinema.showtime;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -84,5 +83,12 @@ public class ShowTime{
 	
 	public SeatAllocation getSeatAllocations() {
 		return seatAllocations;
+	}
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer("ShowTime: " + startTime + "-"+ endTime + "\n");
+		sb.append("Movie: " + movie + "\n");
+		sb.append("Cinema: " + cinema + "\n");
+		return sb.toString();
 	}
 }

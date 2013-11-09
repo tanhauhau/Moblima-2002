@@ -3,8 +3,8 @@ package model;
 import java.text.SimpleDateFormat;
 
 import model.cinema.seat.Seat;
+import model.cinema.showtime.ShowTime;
 import model.customer.Customer;
-import model.showtime.ShowTime;
 
 public class Ticket {
 	private String id;

@@ -2,7 +2,7 @@ package model.movie;
 
 import java.util.ArrayList;
 
-import model.showtime.ShowTime;
+import model.cinema.showtime.ShowTime;
 
 public class Movie {
 	private String code;

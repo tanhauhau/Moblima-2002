@@ -3,7 +3,8 @@ package model.cinema;
 import model.cinema.seat.PremiumSeat;
 import model.cinema.seat.Seat;
 import model.cinema.seat.SeatAllocation;
-import model.showtime.ShowTimetable;
+import model.cinema.showtime.ShowTime;
+import model.cinema.showtime.ShowTimetable;
 
 public class Cinema {
 	
@@ -34,9 +35,22 @@ public class Cinema {
 	public SeatAllocation getSeatAllocation(){
 		return new Seats(this);
 	}
-	public ShowTimetable getShowTimetable() {
-		return showTimetable;
+	public ShowTime[] getShowTime(int year, int month, int date, int hour){
+		return showTimetable.getShowTime(year, month, date, hour);
 	}
+	public ShowTime[] getShowTime(int year, int month, int date){
+		return showTimetable.getShowTime(year, month, date);
+	}
+	public ShowTime[] getShowTime(int year, int month){
+		return showTimetable.getShowTime(year, month);
+	}
+	public ShowTime[] getShowTime(int year){
+		return showTimetable.getShowTime(year);
+	}
+	public ShowTime[] getShowTime(){
+		return showTimetable.getShowTime();
+	}	
+	
 	public void remove(){
 		this.cineplex = null;
 	}

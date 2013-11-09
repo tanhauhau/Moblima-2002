@@ -1,19 +1,13 @@
 package controller;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import model.cinema.Cinema;
 import model.cinema.Cineplex;
 import model.cinema.PlatinumSuiteCinema;
+import model.cinema.showtime.ShowTime;
 import model.movie.Genre;
 import model.movie.Language;
 import model.movie.Movie;
 import model.movie.Status;
-import model.showtime.DayShowTime;
-import model.showtime.ShowTime;
-import model.showtime.ShowTimetable;
 
 public class AdminCinemaApp extends CinemaApp{
 	/*
@@ -157,12 +151,7 @@ public class AdminCinemaApp extends CinemaApp{
 	 */
 	public void showMovie(int cineplexIndex, int cinemaIndex, int movieIndex, int year, int month, int date, int hour){
 		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
-		Calendar c = GregorianCalendar.getInstance();
-		c.set(year, month, date);
-		Date day = c.getTime();
-		ShowTimetable timetable = cinema.getShowTimetable();
-		DayShowTime dayShowTime = timetable.addDayShowTime(day);
-		ShowTime showTime = dayShowTime.getShowTime(hour);
+		ShowTime showTime = cinema.getShowTime(year, month, date, hour)[0];
 		showTime.setMovie(movieList.get(movieIndex));
 	}
 	/**
@@ -176,12 +165,7 @@ public class AdminCinemaApp extends CinemaApp{
 	 */
 	public void showMovie(int cineplexIndex, int cinemaIndex, int movieIndex, int year, int month, int date){
 		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
-		Calendar c = GregorianCalendar.getInstance();
-		c.set(year, month, date);
-		Date day = c.getTime();
-		ShowTimetable timetable = cinema.getShowTimetable();
-		DayShowTime dayShowTime = timetable.addDayShowTime(day);
-		for (ShowTime showTime : dayShowTime.getShowTimes()) {
+		for (ShowTime showTime : cinema.getShowTime(year, month, date)) {
 			showTime.setMovie(movieList.get(movieIndex));
 		}
 	}
@@ -196,12 +180,7 @@ public class AdminCinemaApp extends CinemaApp{
 	 */
 	public void removeMovie(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour){
 		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
-		Calendar c = GregorianCalendar.getInstance();
-		c.set(year, month, date);
-		Date day = c.getTime();
-		ShowTimetable timetable = cinema.getShowTimetable();
-		DayShowTime dayShowTime = timetable.addDayShowTime(day);
-		ShowTime showTime = dayShowTime.getShowTime(hour);
+		ShowTime showTime = cinema.getShowTime(year, month, date, hour)[0];
 		showTime.setMovie(null);
 	}
 	/**
@@ -214,12 +193,7 @@ public class AdminCinemaApp extends CinemaApp{
 	 */
 	public void removeMovie(int cineplexIndex, int cinemaIndex, int year, int month, int date){
 		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
-		Calendar c = GregorianCalendar.getInstance();
-		c.set(year, month, date);
-		Date day = c.getTime();
-		ShowTimetable timetable = cinema.getShowTimetable();
-		DayShowTime dayShowTime = timetable.addDayShowTime(day);
-		for (ShowTime showTime : dayShowTime.getShowTimes()) {
+		for (ShowTime showTime : cinema.getShowTime(year, month, date)) {
 			showTime.setMovie(null);
 		}
 	}

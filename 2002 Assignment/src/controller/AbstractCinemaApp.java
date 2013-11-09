@@ -1,41 +1,33 @@
 package controller;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import model.Ticket;
 import model.cinema.Cinema;
 import model.cinema.Cineplex;
 import model.cinema.seat.Seat;
 import model.cinema.seat.Seat.SeatOccupiedException;
-import model.cinema.seat.SeatAllocation;
 import model.cinema.showtime.ShowTime;
-import model.customer.User;
 import model.customer.User.UserNotLoggedInException;
+import model.movie.Genre;
+import model.movie.Language;
 import model.movie.Movie;
+import model.movie.Status;
 
-public class CinemaApp extends AbstractCinemaApp{
-	protected ArrayList<Movie> movieList;
-	protected ArrayList<Cineplex> cineplexList;
-	
-	public CinemaApp() {
-		movieList = new ArrayList<Movie>();
-		cineplexList = new ArrayList<Cineplex>();
-	}
-
+public abstract class AbstractCinemaApp {
 	/**
 	 * Get all movie listing
 	 * @return array list of movie listing
 	 */
 	public ArrayList<Movie> getMovieListing(){
-		return movieList;
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * @return total number of movie in the movie listing array
 	 */
 	public int getNumberOfMovies(){
-		return movieList.size();
+		throw new UnsupportedOperationException();
 	}
-
 	
 	/***************************************************************************/
 	/***************************************************************************/
@@ -49,14 +41,14 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @return array list of cineplex
 	 */
 	public ArrayList<Cineplex> getAllCineplex(){
-		return cineplexList;
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * @param index index of cineplex in the cineplex array list
 	 * @return total number of cinema in the cineplex
 	 */
 	public int numCinemaInCineplex(int index){
-		return cineplexList.get(index).getNumberOfCinema();
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -66,7 +58,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @return the cinema
 	 */
 	public Cinema getCinema(int cineplexIndex, int cinemaIndex){
-		return cineplexList.get(cineplexIndex).getCinemas().get(cinemaIndex);
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * get all cinema in the cineplex
@@ -74,7 +66,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @return array list of cinemas
 	 */
 	public ArrayList<Cinema> getAllCinema(int cineplexIndex){
-		return cineplexList.get(cineplexIndex).getCinemas();
+		throw new UnsupportedOperationException();
 	}
 	
 	
@@ -95,8 +87,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @return 				the specific show time
 	 */
 	public ShowTime getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour){
-		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
-		return cinema.getShowTime(year, month, date, hour)[0];
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * get the show time for the whole day for the cinema at specific hour
@@ -109,23 +100,14 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * 
 	 */
 	public ShowTime[] getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date){
-		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
-		return cinema.getShowTime(year, month, date);
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * Get all movie show time in all cineplexes
 	 * @return	array of show time
 	 */
 	public ShowTime[] getMovieShowTime(){
-		ArrayList<ShowTime> showTimes = new ArrayList<ShowTime>();
-		
-		for (Cineplex cineplex : cineplexList) {
-			for (Cinema cinema : cineplex.getCinemas()) {
-				showTimes.addAll(Arrays.asList(cinema.getShowTime()));
-			}
-		}
-		ShowTime[] result = new ShowTime[showTimes.size()];
-		return showTimes.toArray(result);
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * get all the show time for the specific movie in the specific cinema
@@ -135,18 +117,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @return					array of show time
 	 */
 	public ShowTime[] getMovieShowTime(int cineplexIndex, int cinemaIndex, int movieIndex){
-		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
-		Movie movie = movieList.get(movieIndex);
-		ArrayList<ShowTime> showTimes = new ArrayList<ShowTime>();
-		
-		ShowTime[] all = cinema.getShowTime();
-		for (ShowTime showTime : all) {
-			if(showTime.hasMovie() && showTime.getMovie().equals(movie)){
-				showTimes.add(showTime);
-			}
-		}
-		ShowTime[] result = new ShowTime[showTimes.size()];
-		return showTimes.toArray(result);
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * get all the show time for the specific movie in the specific cineplex
@@ -155,20 +126,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @return					array of show time
 	 */
 	public ShowTime[] getMovieShowTime(int cineplexIndex, int movieIndex){
-		Cineplex cineplex = cineplexList.get(cineplexIndex);
-		Movie movie = movieList.get(movieIndex);
-		ArrayList<ShowTime> showTimes = new ArrayList<ShowTime>();
-		
-		for (Cinema cinema : cineplex.getCinemas()) {
-			ShowTime[] all = cinema.getShowTime();
-			for (ShowTime showTime : all) {
-				if(showTime.hasMovie() && showTime.getMovie().equals(movie)){
-					showTimes.add(showTime);
-				}
-			}
-		}
-		ShowTime[] result = new ShowTime[showTimes.size()];
-		return showTimes.toArray(result);
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * get all the show time for the specific movie in all cineplexes
@@ -176,21 +134,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @return					array of show time
 	 */
 	public ShowTime[] getMovieShowTime(int movieIndex){
-		Movie movie = movieList.get(movieIndex);
-		ArrayList<ShowTime> showTimes = new ArrayList<ShowTime>();
-		
-		for (Cineplex cineplex : cineplexList) {
-			for (Cinema cinema : cineplex.getCinemas()) {
-				ShowTime[] all = cinema.getShowTime();
-				for (ShowTime showTime : all) {
-					if(showTime.hasMovie() && showTime.getMovie().equals(movie)){
-						showTimes.add(showTime);
-					}
-				}
-			}
-		}
-		ShowTime[] result = new ShowTime[showTimes.size()];
-		return showTimes.toArray(result);
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * get the array of seats in the showtime
@@ -204,7 +148,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @see CinemaApp#getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour)
 	 */
 	public Seat[] getShowTimeSeatAllocation(ShowTime showtime){
-		return showtime.getSeatAllocations().getAllSeats();
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * @param showtime
@@ -217,7 +161,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @see CinemaApp#getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour)
 	 */
 	public int getShowTimeSeatsAvailable(ShowTime showtime){
-		return showtime.getSeatAllocations().getNumberOfAvailableSeats();
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * @param showTime
@@ -230,7 +174,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @see CinemaApp#getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour)
 	 */
 	public boolean isShowTimeFull(ShowTime showTime){
-		return showTime.getSeatAllocations().isFull();
+		throw new UnsupportedOperationException();
 	}
 	/**
 	 * purchase ticket
@@ -249,29 +193,179 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @see CinemaApp#getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour)
 	 */
 	public Ticket purchaseSeat(ShowTime showtime, int seatIndex) throws SeatOccupiedException, UserNotLoggedInException, IndexOutOfBoundsException{
-		SeatAllocation seatAlloc = showtime.getSeatAllocations(); 
-		Seat seat = seatAlloc.getAllSeats()[seatIndex];
-		Ticket ticket = Ticket.generateTicket(showtime, User.getCurrentCustomer(), seat);
-		seatAlloc.purchaseSeat(seat, ticket);
-		return ticket;
+		throw new UnsupportedOperationException(); 
 	}
 	/**
 	 * @return array of ticket the user has bought
 	 * @throws UserNotLoggedInException user has not logged in
 	 */
 	public Ticket[] getPurchaseHistory() throws UserNotLoggedInException{
-		ShowTime[] showtimes = getMovieShowTime();
-		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-		for (ShowTime showtime : showtimes) {
-			for (Seat seat : showtime.getSeatAllocations().getAllSeats()) {
-				Ticket ticket = seat.getTicket();
-				if(ticket.getCustomer().equals(User.getCurrentUser())){
-					tickets.add(ticket);
-				}
-			}
-			
-		}
-		Ticket[] t = new Ticket[tickets.size()];
-		return tickets.toArray(t);
+		throw new UnsupportedOperationException();
 	}
+	/*
+	 * Movies
+	 */
+	/**
+	 * 
+	 * @return true if successfully added, false otherwise
+	 */
+	public boolean addMovie(String code, String title, String description, Genre genre, Language language, int rating, Status status){
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * 
+	 * @param index index of the movie in the arraylist
+	 */
+	public void removeMovie(int index){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * 
+	 * @param index index of the movie to be updated
+	 * @param code	movie code, null if not to change
+	 * @param title movie title, null if not to change 
+	 * @param description movie description, null if not to change
+	 * @param genre genre of the movie, null if not to change
+	 * @param language language of the movie, null if not to change
+	 * @param rating rating of the movie, null if not to change
+	 * @param status status of the movie, null if not to change
+	 */
+	public void updateMovie(int index, String code, String title, String description, Genre genre, Language language, Integer rating, Status status){
+		throw new UnsupportedOperationException();
+	}
+	
+	
+	/***************************************************************************/
+	/***************************************************************************/
+	
+	/*
+	 * Cineplex
+	 */
+	/**
+	 * @param name name of the cineplex
+	 * @return true if succefully added a cineplex to cineplex listing
+	 */
+	public boolean addCineplex(String name){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * @param index index to be remove from the cineplex array list
+	 */
+	public void removeCineplex(int index){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * @param index index of the cineplex in the cineplex array list
+	 * @param name
+	 */
+	public void updateCineplex(int index, String name){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * 
+	 * @param index index of cineplex in cineplex array list
+	 * @param id id of the cinema to be added
+	 * @param type NORMAL or PLATINUM_SUITE
+	 * @return
+	 */
+	public boolean addCinema(int index, String id, Cinema.CinemaType type){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * remove the cinema from the cineplex
+	 * @param cineplexIndex index of the cineplex in the cineplex array list
+	 * @param cinemaIndex	index of the cinema in the cinema array list
+	 */
+	public void removeCinema(int cineplexIndex, int cinemaIndex){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * change the cinema id
+	 * @param cineplexIndex index of the cineplex in the cineplex array list
+	 * @param cinemaIndex	index of the cinema in the cinema array list
+	 * @param id			new id of the cinema
+	 */
+	public void updateCinema(int cineplexIndex, int cinemaIndex, String id){
+		throw new UnsupportedOperationException();
+	}
+	
+	
+	
+	/***************************************************************************/
+	/***************************************************************************/
+	/*
+	 * Show Time
+	 */
+	
+	
+	/**
+	 * set the movie to show on the specific cinema for the specific hour
+	 * @param cineplexIndex index of the cineplex in cineplex array list
+	 * @param cinemaIndex   index of the cinema in cinema array list
+	 * @param movieIndex    index of the movie in movie array list
+	 * @param year          year
+	 * @param month  		month
+	 * @param date			date
+	 * @param hour			hour
+	 */
+	public void showMovie(int cineplexIndex, int cinemaIndex, int movieIndex, int year, int month, int date, int hour){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * set the movie to show on the specific cinema for the whole day
+	 * @param cineplexIndex index of the cineplex in cineplex array list
+	 * @param cinemaIndex   index of the cinema in cinema array list
+	 * @param movieIndex    index of the movie in movie array list
+	 * @param year          year
+	 * @param month  		month
+	 * @param date			date
+	 */
+	public void showMovie(int cineplexIndex, int cinemaIndex, int movieIndex, int year, int month, int date){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * set the cinema to not showing any movie for the specific hour
+	 * @param cineplexIndex index of the cineplex in cineplex array list
+	 * @param cinemaIndex   index of the cinema in cinema array list
+	 * @param year          year
+	 * @param month  		month
+	 * @param date			date
+	 * @param hour			hour
+	 */
+	public void removeMovie(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * set the cinema to not showing any movie for the specific date
+	 * @param cineplexIndex index of the cineplex in cineplex array list
+	 * @param cinemaIndex   index of the cinema in cinema array list
+	 * @param year          year
+	 * @param month  		month
+	 * @param date			date in the month
+	 */
+	public void removeMovie(int cineplexIndex, int cinemaIndex, int year, int month, int date){
+		throw new UnsupportedOperationException();
+	}
+	
+	
+	/***************************************************************************/
+	/***************************************************************************/
+	/*
+	 * Report
+	 */
+
+	public String getSalesReportByMovie(){
+		throw new UnsupportedOperationException();
+	}
+	public String getSalesReportByCineplex(){
+		throw new UnsupportedOperationException();
+	}
+	public String getSalesReportByMonth(){
+		throw new UnsupportedOperationException();
+	}
+	public String getSalesReportByDay(){
+		throw new UnsupportedOperationException();
+	} 
+
 }

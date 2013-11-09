@@ -1,11 +1,11 @@
-package model.showtime;
+package model.cinema.showtime;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import model.cinema.Cinema;
 
-public class DayShowTime {
+class DayShowTime extends IShowTimeGroup{
 	private ShowTime[] shows;
 	private Cinema cinema;
 	private Date day;
@@ -16,6 +16,8 @@ public class DayShowTime {
 
 		Calendar c = Calendar.getInstance();
 		c.setTime(day);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
 		for (int i = 0; i < 12; i++) {
 			c.set(Calendar.HOUR_OF_DAY, i * 2);
 			Date startTime = c.getTime();
@@ -25,16 +27,25 @@ public class DayShowTime {
 			shows[i] = new ShowTime(startTime, endTime, null, cinema);
 		}
 	}
-	public ShowTime getShowTime(int hour){
-		return shows[hour/2];
-	}
-	public ShowTime[] getShowTimes(){
-		return shows;
-	}
 	public Cinema getCinema() {
 		return cinema;
 	}
 	public Date getDay() {
 		return day;
+	}
+	@Override
+	ShowTime[] getAll(){
+		return shows;
+	}
+	@Override
+	ShowTime[] get(Cinema cinema, Date date, LEVEL level) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		final int hour = c.get(Calendar.HOUR_OF_DAY);
+		
+		return new ShowTime[]{get(hour)};
+	}
+	private ShowTime get(int hour){
+		return shows[hour/2];
 	}
 }
