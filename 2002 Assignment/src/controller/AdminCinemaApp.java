@@ -1,15 +1,27 @@
 package controller;
 
+import java.util.ArrayList;
+
 import model.cinema.Cinema;
 import model.cinema.Cineplex;
 import model.cinema.PlatinumSuiteCinema;
 import model.cinema.showtime.ShowTime;
+import model.customer.Customer;
 import model.movie.Genre;
 import model.movie.Language;
 import model.movie.Movie;
 import model.movie.Status;
 
 public class AdminCinemaApp extends CinemaApp{
+
+	public AdminCinemaApp(Customer customer) {
+		super(customer);
+	}
+	public AdminCinemaApp(Customer customer, ArrayList<Movie> movie,
+			ArrayList<Cineplex> cineplex) {
+		super(customer, movie, cineplex);
+	}
+	
 	/*
 	 * Movies
 	 */

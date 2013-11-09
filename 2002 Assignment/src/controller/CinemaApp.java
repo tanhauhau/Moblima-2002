@@ -9,17 +9,30 @@ import model.cinema.seat.Seat;
 import model.cinema.seat.Seat.SeatOccupiedException;
 import model.cinema.seat.SeatAllocation;
 import model.cinema.showtime.ShowTime;
-import model.customer.User;
-import model.customer.User.UserNotLoggedInException;
+import model.customer.Customer;
 import model.movie.Movie;
 
 public class CinemaApp extends AbstractCinemaApp{
 	protected ArrayList<Movie> movieList;
 	protected ArrayList<Cineplex> cineplexList;
+	protected Customer customer;
 	
-	public CinemaApp() {
-		movieList = new ArrayList<Movie>();
-		cineplexList = new ArrayList<Cineplex>();
+	/**
+	 * Load with default movie and cineplex
+	 * @param customer	
+	 * @param movie
+	 * @param cineplex
+	 */
+	public CinemaApp(Customer customer, ArrayList<Movie> movie, ArrayList<Cineplex> cineplex) {
+		movieList = movie;
+		cineplexList = cineplex;
+		this.customer = customer;
+		if(customer == null)
+			 throw new IllegalArgumentException("Customer is null");
+	}
+	
+	public CinemaApp(Customer customer) {
+		this(customer, new ArrayList<Movie>(), new ArrayList<Cineplex>());
 	}
 
 	/**
@@ -248,10 +261,10 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @see CinemaApp#getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date)
 	 * @see CinemaApp#getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour)
 	 */
-	public Ticket purchaseSeat(ShowTime showtime, int seatIndex) throws SeatOccupiedException, UserNotLoggedInException, IndexOutOfBoundsException{
+	public Ticket purchaseSeat(ShowTime showtime, int seatIndex) throws SeatOccupiedException, IndexOutOfBoundsException{
 		SeatAllocation seatAlloc = showtime.getSeatAllocations(); 
 		Seat seat = seatAlloc.getAllSeats()[seatIndex];
-		Ticket ticket = Ticket.generateTicket(showtime, User.getCurrentCustomer(), seat);
+		Ticket ticket = Ticket.generateTicket(showtime, customer, seat);
 		seatAlloc.purchaseSeat(seat, ticket);
 		return ticket;
 	}
@@ -259,13 +272,13 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @return array of ticket the user has bought
 	 * @throws UserNotLoggedInException user has not logged in
 	 */
-	public Ticket[] getPurchaseHistory() throws UserNotLoggedInException{
+	public Ticket[] getPurchaseHistory(){
 		ShowTime[] showtimes = getMovieShowTime();
 		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 		for (ShowTime showtime : showtimes) {
 			for (Seat seat : showtime.getSeatAllocations().getAllSeats()) {
 				Ticket ticket = seat.getTicket();
-				if(ticket.getCustomer().equals(User.getCurrentUser())){
+				if(ticket.getCustomer().equals(customer)){
 					tickets.add(ticket);
 				}
 			}

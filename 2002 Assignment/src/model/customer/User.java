@@ -2,15 +2,14 @@ package model.customer;
 
 import java.util.ArrayList;
 
-import storage.UserStorageHandler;
-
 public class User{
 	private String password;
 	private Customer customer;
+	private boolean isAdmin;
 	
 	private static User currentUser;
 	private static ArrayList<User> userList;
-	private static UserStorageHandler storage;
+//	private static UserStorageHandler storage;
 	/*
 	 * Create user
 	 */
@@ -25,11 +24,11 @@ public class User{
 		User user;
 		Customer customer = Customer.createCustomer(name, mobileNumber, emailAddress, age);
 		if(isAdmin)
-			user = new Admin(customer, password);
+			user = new User(customer, password, true);
 		else
-			user = new User(customer, password);
+			user = new User(customer, password, false);
 		userList.add(user);
-		save();
+//		save();
 		return user;
 	}
 	private static boolean isRepeatName(String name){
@@ -43,14 +42,22 @@ public class User{
 	/*
 	 * store and load
 	 */
-	public static void initialize(){
-		userList = new ArrayList<User>();
-		storage = new UserStorageHandler(userList);
-		storage.loadData();
+	public static void initialize(ArrayList<User> users){
+		userList = users;
 		currentUser = null;
 	}
-	public static void save(){
-		storage.saveData();
+
+//	public static void initialize(){
+//		userList = new ArrayList<User>();
+//		storage = new UserStorageHandler(userList);
+//		storage.loadData();
+//		currentUser = null;
+//	}
+//	public static void save(){
+//		storage.saveData();
+//	}
+	public static ArrayList<User> getUserList() {
+		return userList;
 	}
 	
 	/*
@@ -65,9 +72,6 @@ public class User{
 	}
 	public static Customer getCurrentCustomer() throws UserNotLoggedInException{
 		return getCurrentUser().getCustomer();
-	}
-	public static boolean isAdmin() throws UserNotLoggedInException{
-		return (getCurrentUser() instanceof Admin);
 	}
 	public static User login(String name, String password) throws LoginFailedException{
 		for (User user : userList) {
@@ -90,9 +94,10 @@ public class User{
 	 * -cannot be instantiated outside this class
 	 * -has to call User.createUser factory method
 	 */
-	private User(Customer customer, String password) {
+	private User(Customer customer, String password, boolean isAdmin) {
 		this.customer = customer;
 		this.password = password;
+		this.isAdmin = isAdmin;
 	}
 	private boolean authenticate(String password){
 		return this.password.equals(password);
@@ -100,14 +105,27 @@ public class User{
 	public Customer getCustomer(){
 		return customer;
 	}
-	/*
-	 * Admin Class
-	 */
-	public static class Admin extends User{
-		private Admin(Customer customer, String password){
-			super(customer, password);
-		}
+	public boolean isAdmin(){
+		return isAdmin;
 	}
+	
+	public Customer getCustomer(String name){
+		for (User user : userList) {
+			if(user.getCustomer().getName().equals(name)){
+				return user.getCustomer();
+			}
+		}
+		return null;
+	}
+	
+//	/*
+//	 * Admin Class
+//	 */
+//	public static class Admin extends User{
+//		private Admin(Customer customer, String password){
+//			super(customer, password);
+//		}
+//	}
 	/*
 	 * User Class Exceptions
 	 */
