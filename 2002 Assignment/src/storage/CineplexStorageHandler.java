@@ -52,7 +52,7 @@ public class CineplexStorageHandler extends StorageHandler{
 			sb.append(cinemas.size());
 			sb.append("\n");
 			for (Cinema cinema : cinemas) {
-				sb.append(String.format("%d,%s,%s\n", i, cinema.getId(), );
+				sb.append(String.format("%d,%s,%s\n", i, cinema.getId()));
 				sb.append(",");
 				
 			}
