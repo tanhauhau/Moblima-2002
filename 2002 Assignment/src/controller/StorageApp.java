@@ -8,20 +8,21 @@ import model.customer.User;
 import model.movie.Movie;
 
 public class StorageApp {
-	public ArrayList<Cineplex> loadCineplexes(){
-		return null;
-	}
-	public ArrayList<Movie> loadMovies(){
-		return null;
-	}
-	public void loadShowTime(ArrayList<Cineplex> cineplex, ArrayList<Movie> movie){
+	public void loadCineplexes(){
 		
 	}
-	public ArrayList<User> loadUsers(){
-		return null;
+	public void loadMovies(){
+		
+	}
+	public void loadShowTime(){
+		
+	}
+	public void loadUsers(){
+		
 	}
 	
 	public void saveCineplexes(ArrayList<Cineplex> cineplex){
+		
 	}
 	public void saveMovies(ArrayList<Movie> movie){
 	}

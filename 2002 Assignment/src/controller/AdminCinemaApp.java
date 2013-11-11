@@ -10,6 +10,7 @@ import model.customer.Customer;
 import model.movie.Genre;
 import model.movie.Language;
 import model.movie.Movie;
+import model.movie.Rating;
 import model.movie.Status;
 
 public class AdminCinemaApp extends CinemaApp{
@@ -29,8 +30,8 @@ public class AdminCinemaApp extends CinemaApp{
 	 * 
 	 * @return true if successfully added, false otherwise
 	 */
-	public boolean addMovie(String code, String title, String description, Genre genre, Language language, int rating, Status status){
-		return movieList.add(new Movie(code, title, description, genre, language, rating, status));
+	public boolean addMovie(String code, String title, String description, Genre genre, Language language, Rating rating){
+		return movieList.add(new Movie(code, title, description, genre, language, rating, Status.COMING_SOON));
 	}
 	
 	/**
@@ -51,7 +52,7 @@ public class AdminCinemaApp extends CinemaApp{
 	 * @param rating rating of the movie, null if not to change
 	 * @param status status of the movie, null if not to change
 	 */
-	public void updateMovie(int index, String code, String title, String description, Genre genre, Language language, Integer rating, Status status){
+	public void updateMovie(int index, String code, String title, String description, Genre genre, Language language, Rating rating, Status status){
 		Movie movie = movieList.get(index);
 		if(code != null){ 
 			movie.setCode(code);
@@ -85,10 +86,13 @@ public class AdminCinemaApp extends CinemaApp{
 	 */
 	/**
 	 * @param name name of the cineplex
-	 * @return true if succefully added a cineplex to cineplex listing
+	 * @return index of the newly added Cineplex
+	 * Lihau: changed - previous : true if succefully added a cineplex to cineplex listing	 
 	 */
-	public boolean addCineplex(String name){
-		return cineplexList.add(new Cineplex(name));
+	public int addCineplex(String name){
+		Cineplex c = new Cineplex(name);
+		cineplexList.add(c);
+		return cineplexList.indexOf(c);
 	}
 	/**
 	 * @param index index to be remove from the cineplex array list
@@ -193,7 +197,9 @@ public class AdminCinemaApp extends CinemaApp{
 	public void removeMovie(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour){
 		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
 		ShowTime showTime = cinema.getShowTime(year, month, date, hour)[0];
+		Movie movie = showTime.getMovie();
 		showTime.setMovie(null);
+		movie.removeShowTime(showTime);
 	}
 	/**
 	 * set the cinema to not showing any movie for the specific date
@@ -206,7 +212,9 @@ public class AdminCinemaApp extends CinemaApp{
 	public void removeMovie(int cineplexIndex, int cinemaIndex, int year, int month, int date){
 		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
 		for (ShowTime showTime : cinema.getShowTime(year, month, date)) {
+			Movie movie = showTime.getMovie();
 			showTime.setMovie(null);
+			movie.removeShowTime(showTime);
 		}
 	}
 	

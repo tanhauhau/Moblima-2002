@@ -9,6 +9,9 @@ public class LoginApp {
 	public LoginApp() {
 
 	}
+	public User getCurrentUser() throws UserNotLoggedInException{
+		return User.getCurrentUser();
+	}
 	public User login(String name, String password) throws LoginFailedException, UserNotLoggedInException{
 		User user = User.login(name, password);
 		return user;

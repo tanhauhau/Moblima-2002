@@ -12,6 +12,7 @@ import model.customer.User.UserNotLoggedInException;
 import model.movie.Genre;
 import model.movie.Language;
 import model.movie.Movie;
+import model.movie.Rating;
 import model.movie.Status;
 
 public abstract class AbstractCinemaApp {
@@ -22,6 +23,15 @@ public abstract class AbstractCinemaApp {
 	public ArrayList<Movie> getMovieListing(){
 		throw new UnsupportedOperationException();
 	}
+	/**
+	 * Get all movie listing
+	 * @param status filter status of movie
+	 * @return array list of movie listing
+	 */
+	public ArrayList<Movie> getMovieListing(Status status){
+		throw new UnsupportedOperationException();
+	}	
+	
 	/**
 	 * @return total number of movie in the movie listing array
 	 */
@@ -41,6 +51,12 @@ public abstract class AbstractCinemaApp {
 	 * @return array list of cineplex
 	 */
 	public ArrayList<Cineplex> getAllCineplex(){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * @return Number of cineplex
+	 */
+	public int getNumberOfCineplex(){
 		throw new UnsupportedOperationException();
 	}
 	/**
@@ -86,7 +102,7 @@ public abstract class AbstractCinemaApp {
 	 * @param hour			hour
 	 * @return 				the specific show time
 	 */
-	public ShowTime getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour){
+	public ShowTime getShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour){
 		throw new UnsupportedOperationException();
 	}
 	/**
@@ -99,14 +115,64 @@ public abstract class AbstractCinemaApp {
 	 * @return 				array of show time 
 	 * 
 	 */
-	public ShowTime[] getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date){
+	public ShowTime[] getShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * get the show time for the whole day for the cinema at specific hour
+	 * @param cineplexIndex index of the cineplex in cineplex array list
+	 * @param cinemaIndex   index of the cinema in cinema array list
+	 * @param year          year
+	 * @param month  		month
+	 * @param date			date in the month
+	 * @return 				array of show time 
+	 * 
+	 */
+	public ShowTime[] getShowTime(int cineplexIndex, int year, int month, int date){
 		throw new UnsupportedOperationException();
 	}
 	/**
 	 * Get all movie show time in all cineplexes
 	 * @return	array of show time
 	 */
-	public ShowTime[] getMovieShowTime(){
+	public ShowTime[] getShowTime(){
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * get all the show time for the specific movie in the specific cinema
+	 * @param cineplexIndex 	index of the cineplex in cineplex array list
+	 * @param cinemaIndex		index of the cinema in cinema array list
+	 * @param movieIndex		index of the movie in movie array list
+	 * @param year          	year
+	 * @param month  			month
+	 * @param day				date in the month	 
+	 * @return					array of show time
+	 */
+	public ShowTime[] getMovieShowTime(int cineplexIndex, int cinemaIndex, int movieIndex, int year, int month, int day){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * get all the show time for the specific movie in the specific cineplex
+	 * @param cineplexIndex 	index of the cineplex in cineplex array list
+	 * @param movieIndex		index of the movie in movie array list
+	 * @param year          	year
+	 * @param month  			month
+	 * @param day				date in the month
+	 * @return					array of show time
+	 */
+	public ShowTime[] getMovieShowTime(int cineplexIndex, int movieIndex, int year, int month, int day){
+		throw new UnsupportedOperationException();
+	}
+	/**
+	 * get all the show time for the specific movie in all cineplexes
+	 * @param movieIndex		index of the movie in movie array list
+	 * @param year          	year
+	 * @param month  			month
+	 * @param day				date in the month
+	 * @return					array of show time
+	 */
+	public ShowTime[] getMovieShowTime(int movieIndex, int year, int month, int day){
 		throw new UnsupportedOperationException();
 	}
 	/**
@@ -209,7 +275,7 @@ public abstract class AbstractCinemaApp {
 	 * 
 	 * @return true if successfully added, false otherwise
 	 */
-	public boolean addMovie(String code, String title, String description, Genre genre, Language language, int rating, Status status){
+	public boolean addMovie(String code, String title, String description, Genre genre, Language language, Rating rating){
 		throw new UnsupportedOperationException();
 	}
 	
@@ -231,7 +297,7 @@ public abstract class AbstractCinemaApp {
 	 * @param rating rating of the movie, null if not to change
 	 * @param status status of the movie, null if not to change
 	 */
-	public void updateMovie(int index, String code, String title, String description, Genre genre, Language language, Integer rating, Status status){
+	public void updateMovie(int index, String code, String title, String description, Genre genre, Language language, Rating rating, Status status){
 		throw new UnsupportedOperationException();
 	}
 	
@@ -244,9 +310,10 @@ public abstract class AbstractCinemaApp {
 	 */
 	/**
 	 * @param name name of the cineplex
-	 * @return true if succefully added a cineplex to cineplex listing
+	 * @return index of the newly added Cineplex
+	 * Lihau: changed - previous : true if succefully added a cineplex to cineplex listing
 	 */
-	public boolean addCineplex(String name){
+	public int addCineplex(String name){
 		throw new UnsupportedOperationException();
 	}
 	/**

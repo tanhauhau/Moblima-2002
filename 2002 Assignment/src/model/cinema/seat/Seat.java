@@ -39,6 +39,10 @@ public class Seat {
 	public String getSeatId() {
 		return seatId;
 	}
+	@Override
+	public String toString() {
+		return String.format("%s - %s", seatId, occupied?"Occupied":"Empty");
+	}
 	public static class SeatOccupiedException extends Exception{
 		private static final long serialVersionUID = 1L;
 		public SeatOccupiedException() {

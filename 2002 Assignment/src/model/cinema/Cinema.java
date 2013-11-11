@@ -68,4 +68,8 @@ public class Cinema {
 			}
 		}
 	}
+	@Override
+	public String toString() {
+		return String.format("Cinema <%s>", id);
+	}
 }

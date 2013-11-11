@@ -71,6 +71,7 @@ public class ShowTime{
 
 	public void setMovie(Movie movie) {
 		this.movie = movie;
+		if(movie != null) movie.addShowTime(this);
 	}
 	
 	public Cinema getCinema() {
@@ -87,8 +88,8 @@ public class ShowTime{
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer("ShowTime: " + startTime + "-"+ endTime + "\n");
-		sb.append("Movie: " + movie + "\n");
-		sb.append("Cinema: " + cinema + "\n");
+		sb.append("Movie: " + ((movie != null) ? movie.getTitle() : "<None>") + "\n");
+		sb.append("Cinema: " + cinema.getId() + "\n");
 		return sb.toString();
 	}
 }

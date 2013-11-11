@@ -10,13 +10,13 @@ public class Movie {
 	private String description;
 	private Genre genre;
 	private Language language;
-	private int rating;
+	private Rating rating;
 	private Status status;
 	private double priceRate;
 	private ArrayList<ShowTime> showTimes;
 	
 	public Movie(String code, String title, String description, Genre genre,
-			Language language, int rating, Status status) {
+			Language language, Rating rating, Status status) {
 		this.code = code;
 		this.title = title;
 		this.description = description;
@@ -61,11 +61,11 @@ public class Movie {
 		this.language = language;
 	}
 
-	public int getRating() {
+	public Rating getRating() {
 		return rating;
 	}
 
-	public void setRating(int rating) {
+	public void setRating(Rating rating) {
 		this.rating = rating;
 	}
 
@@ -74,6 +74,12 @@ public class Movie {
 	}
 
 	public void setStatus(Status status) {
+		if(!status.equals(Status.NOW_SHOWING)){
+			for (ShowTime showtime : showTimes) {
+				showtime.setMovie(null);
+			}
+			showTimes.clear();
+		}
 		this.status = status;
 	}
 
@@ -90,9 +96,11 @@ public class Movie {
 	
 	public void addShowTime(ShowTime showTime){
 		showTimes.add(showTime);
+		setStatus(Status.NOW_SHOWING);
 	}
 	public void removeShowTime(ShowTime showTime){
 		showTimes.remove(showTime);
+		if(showTimes.size() == 0)	setStatus(Status.END_OF_SHOWING);
 	}
 	public ArrayList<ShowTime> getShowTimes(){
 		return showTimes;

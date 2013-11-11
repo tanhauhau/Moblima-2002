@@ -11,6 +11,7 @@ import model.cinema.seat.SeatAllocation;
 import model.cinema.showtime.ShowTime;
 import model.customer.Customer;
 import model.movie.Movie;
+import model.movie.Status;
 
 public class CinemaApp extends AbstractCinemaApp{
 	protected ArrayList<Movie> movieList;
@@ -43,6 +44,20 @@ public class CinemaApp extends AbstractCinemaApp{
 		return movieList;
 	}
 	/**
+	 * Get all movie listing
+	 * @param status filter status of movie
+	 * @return array list of movie listing
+	 */
+	public ArrayList<Movie> getMovieListing(Status status){
+		ArrayList<Movie> result = new ArrayList<Movie>();
+		for (Movie movie : movieList) {
+			if(movie.getStatus().equals(status)){
+				result.add(movie);
+			}
+		}
+		return result;
+	}	
+	/**
 	 * @return total number of movie in the movie listing array
 	 */
 	public int getNumberOfMovies(){
@@ -63,6 +78,12 @@ public class CinemaApp extends AbstractCinemaApp{
 	 */
 	public ArrayList<Cineplex> getAllCineplex(){
 		return cineplexList;
+	}
+	/**
+	 * @return Number of cineplex
+	 */
+	public int getNumberOfCineplex(){
+		return cineplexList.size();
 	}
 	/**
 	 * @param index index of cineplex in the cineplex array list
@@ -107,7 +128,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @param hour			hour
 	 * @return 				the specific show time
 	 */
-	public ShowTime getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour){
+	public ShowTime getShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date, int hour){
 		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
 		return cinema.getShowTime(year, month, date, hour)[0];
 	}
@@ -121,15 +142,34 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @return 				array of show time 
 	 * 
 	 */
-	public ShowTime[] getMovieShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date){
+	public ShowTime[] getShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date){
 		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
 		return cinema.getShowTime(year, month, date);
+	}
+	/**
+	 * get the show time for the whole day for the cinema at specific hour
+	 * @param cineplexIndex index of the cineplex in cineplex array list
+	 * @param cinemaIndex   index of the cinema in cinema array list
+	 * @param year          year
+	 * @param month  		month
+	 * @param date			date in the month
+	 * @return 				array of show time 
+	 * 
+	 */
+	public ShowTime[] getShowTime(int cineplexIndex, int year, int month, int date){
+		Cineplex cineplex = cineplexList.get(cineplexIndex);
+		ArrayList<ShowTime> shows = new ArrayList<ShowTime>();
+		for (Cinema c : cineplex.getCinemas()) {
+			shows.addAll(Arrays.asList(c.getShowTime()));
+		}
+		ShowTime[] s = new ShowTime[shows.size()];
+		return shows.toArray(s);
 	}
 	/**
 	 * Get all movie show time in all cineplexes
 	 * @return	array of show time
 	 */
-	public ShowTime[] getMovieShowTime(){
+	public ShowTime[] getShowTime(){
 		ArrayList<ShowTime> showTimes = new ArrayList<ShowTime>();
 		
 		for (Cineplex cineplex : cineplexList) {
@@ -140,6 +180,83 @@ public class CinemaApp extends AbstractCinemaApp{
 		ShowTime[] result = new ShowTime[showTimes.size()];
 		return showTimes.toArray(result);
 	}
+	
+	/**
+	 * get all the show time for the specific movie in the specific cinema
+	 * @param cineplexIndex 	index of the cineplex in cineplex array list
+	 * @param cinemaIndex		index of the cinema in cinema array list
+	 * @param movieIndex		index of the movie in movie array list
+	 * @param year          	year
+	 * @param month  			month
+	 * @param day				date in the month	 
+	 * @return					array of show time
+	 */
+	public ShowTime[] getMovieShowTime(int cineplexIndex, int cinemaIndex, int movieIndex, int year, int month, int day){
+		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
+		Movie movie = movieList.get(movieIndex);
+		ArrayList<ShowTime> showTimes = new ArrayList<ShowTime>();
+		
+		ShowTime[] all = cinema.getShowTime(year, month, day);
+		
+		for (ShowTime showTime : all) {
+			if(showTime.hasMovie() && showTime.getMovie().equals(movie)){
+				showTimes.add(showTime);
+			}
+		}
+		ShowTime[] result = new ShowTime[showTimes.size()];
+		return showTimes.toArray(result);
+	}
+	/**
+	 * get all the show time for the specific movie in the specific cineplex
+	 * @param cineplexIndex 	index of the cineplex in cineplex array list
+	 * @param movieIndex		index of the movie in movie array list
+	 * @param year          	year
+	 * @param month  			month
+	 * @param day				date in the month
+	 * @return					array of show time
+	 */
+	public ShowTime[] getMovieShowTime(int cineplexIndex, int movieIndex, int year, int month, int day){
+		Cineplex cineplex = cineplexList.get(cineplexIndex);
+		Movie movie = movieList.get(movieIndex);
+		ArrayList<ShowTime> showTimes = new ArrayList<ShowTime>();
+		
+		for (Cinema cinema : cineplex.getCinemas()) {
+			ShowTime[] all = cinema.getShowTime(year, month, day);
+			for (ShowTime showTime : all) {
+				if(showTime.hasMovie() && showTime.getMovie().equals(movie)){
+					showTimes.add(showTime);
+				}
+			}
+		}
+		ShowTime[] result = new ShowTime[showTimes.size()];
+		return showTimes.toArray(result);
+	}
+	/**
+	 * get all the show time for the specific movie in all cineplexes
+	 * @param movieIndex		index of the movie in movie array list
+	 * @param year          	year
+	 * @param month  			month
+	 * @param day				date in the month
+	 * @return					array of show time
+	 */
+	public ShowTime[] getMovieShowTime(int movieIndex, int year, int month, int day){
+		Movie movie = movieList.get(movieIndex);
+		ArrayList<ShowTime> showTimes = new ArrayList<ShowTime>();
+		
+		for (Cineplex cineplex : cineplexList) {
+			for (Cinema cinema : cineplex.getCinemas()) {
+				ShowTime[] all = cinema.getShowTime(year, month, day);
+				for (ShowTime showTime : all) {
+					if(showTime.hasMovie() && showTime.getMovie().equals(movie)){
+						showTimes.add(showTime);
+					}
+				}
+			}
+		}
+		ShowTime[] result = new ShowTime[showTimes.size()];
+		return showTimes.toArray(result);
+	}
+	
 	/**
 	 * get all the show time for the specific movie in the specific cinema
 	 * @param cineplexIndex 	index of the cineplex in cineplex array list
@@ -273,7 +390,7 @@ public class CinemaApp extends AbstractCinemaApp{
 	 * @throws UserNotLoggedInException user has not logged in
 	 */
 	public Ticket[] getPurchaseHistory(){
-		ShowTime[] showtimes = getMovieShowTime();
+		ShowTime[] showtimes = getShowTime();
 		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 		for (ShowTime showtime : showtimes) {
 			for (Seat seat : showtime.getSeatAllocations().getAllSeats()) {

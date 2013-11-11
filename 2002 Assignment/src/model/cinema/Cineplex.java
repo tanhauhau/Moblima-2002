@@ -35,4 +35,8 @@ public class Cineplex {
 	public int getNumberOfCinema(){
 		return cinemas.size();
 	}
+	@Override
+	public String toString() {
+		return String.format("Cineplex %s", name);
+	}
 }
