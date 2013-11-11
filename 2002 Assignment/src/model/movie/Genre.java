@@ -5,5 +5,5 @@ public enum Genre {
 	THRILLER, 
 	DRAMA, 
 	ROMANCE, 
-	EDVENTURE
+	ADVENTURE
 }

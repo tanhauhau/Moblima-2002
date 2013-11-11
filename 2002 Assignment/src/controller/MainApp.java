@@ -1,54 +1,54 @@
 package controller;
 
-import java.util.ArrayList;
-
-import view.GUIViewApp;
-import view.IViewApp;
-
-import model.cinema.Cineplex;
 import model.customer.Customer;
 import model.customer.User;
 import model.customer.User.UserNotLoggedInException;
-import model.movie.Movie;
+import view.ConsoleViewApp;
+import view.IViewApp;
 
 public class MainApp {
 	public MainApp() throws UserNotLoggedInException {
 		//View
-		IViewApp view = new GUIViewApp(); 
+		IViewApp view = new ConsoleViewApp(); 
 		
 		//read from storage
 		StorageApp storage = new StorageApp();
 		
-		boolean hasStorage = storage.hasStorage();
+		//load users
+		LoginApp auth = new LoginApp();
+		storage.loadUsers(auth);
 		
-		ArrayList<Movie> movie = null;
-		ArrayList<Cineplex> cineplex = null;
-		
-		if(hasStorage){
-//			ArrayList<User> users ;//= storage.loadUsers();
-//			User.initialize(users);
+		while(true){
+			//login
+			boolean loginSuccess = view.auth(auth);
+			if(!loginSuccess) break;
+			//save changes
+			storage.saveUsers(auth);
 			
-			storage.loadMovies();
-			storage.loadCineplexes();
-			storage.loadShowTime();
-		}
-		
-		//user login
-		LoginApp login = new LoginApp();
-		//either one
-		view.auth(login);
-		//		storage.saveUsers(User.getUserList());
-		User user = login.getCurrentUser();
-		Customer customer = user.getCustomer();
-		
-		AbstractCinemaApp cinemaApp;
-		if(user.isAdmin()){
-			cinemaApp = (hasStorage) ? new AdminCinemaApp(customer, movie, cineplex) : new AdminCinemaApp(customer);
-		}else{
-			cinemaApp = (hasStorage) ? new CinemaApp(customer, movie, cineplex) : new CinemaApp(customer);
-		}
-		
-		
+			//get user
+			User user = auth.getCurrentUser();
+			Customer customer = user.getCustomer();
+			
+			//get cinema app
+			AbstractCinemaApp cinemaApp;
+			cinemaApp = new AdminCinemaApp();//user.isAdmin()? new AdminCinemaApp() : new CinemaApp();   
+			cinemaApp.setCustomer(customer);
+			
+			//load all saved movies
+			storage.loadMovies(cinemaApp);
+			storage.loadCineplexes(cinemaApp);
+			storage.loadShowTime(cinemaApp, auth);
+	
+			//start view
+			view.start(cinemaApp, user.isAdmin());
+			
+			//save
+			storage.saveMovies(cinemaApp);
+			storage.saveCineplexes(cinemaApp);
+			storage.saveShowTime(cinemaApp, auth);
+			
+			auth.logout();
+		}		
 	}
 	public static void main(String[] args) throws UserNotLoggedInException {
 		new MainApp();

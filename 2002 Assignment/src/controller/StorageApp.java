@@ -1,37 +1,50 @@
 package controller;
 
-import java.util.ArrayList;
-
-import model.cinema.Cineplex;
-import model.cinema.showtime.ShowTime;
-import model.customer.User;
-import model.movie.Movie;
+import storage.CineplexStorageHandler;
+import storage.MovieStorageHandler;
+import storage.ShowTimeStorageHandler;
+import storage.StorageHandler;
+import storage.UserStorageHandler;
 
 public class StorageApp {
-	public void loadCineplexes(){
-		
-	}
-	public void loadMovies(){
-		
-	}
-	public void loadShowTime(){
-		
-	}
-	public void loadUsers(){
-		
+	public StorageApp() {
 	}
 	
-	public void saveCineplexes(ArrayList<Cineplex> cineplex){
-		
+	public void loadCineplexes(AbstractCinemaApp cinemaApp){
+		StorageHandler cineplexStorage = new CineplexStorageHandler(cinemaApp);
+		cineplexStorage.loadData();
 	}
-	public void saveMovies(ArrayList<Movie> movie){
+	public void loadMovies(AbstractCinemaApp cinemaApp){
+		StorageHandler movieStorage = new MovieStorageHandler(cinemaApp);
+		movieStorage.loadData();
 	}
-	public void saveShowTime(ShowTime[] showtime){
+	public void loadShowTime(AbstractCinemaApp cinemaApp, LoginApp loginApp){
+		StorageHandler stStorage = new ShowTimeStorageHandler(cinemaApp, loginApp);
+		stStorage.loadData();
 	}
-	public void saveUsers(ArrayList<User> user){
+	public void loadUsers(LoginApp loginApp){
+		StorageHandler userStorage = new UserStorageHandler(loginApp);
+		userStorage.loadData();
+	}
+	
+	public void saveCineplexes(AbstractCinemaApp cinemaApp){
+		StorageHandler cineplexStorage = new CineplexStorageHandler(cinemaApp);
+		cineplexStorage.saveData();
+	}
+	public void saveMovies(AbstractCinemaApp cinemaApp){
+		StorageHandler movieStorage = new MovieStorageHandler(cinemaApp);
+		movieStorage.saveData();
+	}
+	public void saveShowTime(AbstractCinemaApp cinemaApp, LoginApp loginApp){
+		StorageHandler stStorage = new ShowTimeStorageHandler(cinemaApp, loginApp);
+		stStorage.saveData();
+	}
+	public void saveUsers(LoginApp loginApp){
+		StorageHandler userStorage = new UserStorageHandler(loginApp);
+		userStorage.saveData();
 	}
 	
 	public boolean hasStorage(){
-		return false;
+		return true;
 	}
 }

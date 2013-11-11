@@ -1,6 +1,5 @@
 package controller;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import model.Ticket;
 import model.cinema.Cinema;
@@ -10,6 +9,7 @@ import model.cinema.seat.Seat.SeatOccupiedException;
 import model.cinema.seat.SeatAllocation;
 import model.cinema.showtime.ShowTime;
 import model.customer.Customer;
+import model.customer.User.UserNotLoggedInException;
 import model.movie.Movie;
 import model.movie.Status;
 
@@ -19,23 +19,16 @@ public class CinemaApp extends AbstractCinemaApp{
 	protected Customer customer;
 	
 	/**
-	 * Load with default movie and cineplex
-	 * @param customer	
-	 * @param movie
-	 * @param cineplex
 	 */
-	public CinemaApp(Customer customer, ArrayList<Movie> movie, ArrayList<Cineplex> cineplex) {
-		movieList = movie;
-		cineplexList = cineplex;
+	public CinemaApp(){
+		movieList = new ArrayList<Movie>();
+		cineplexList = new ArrayList<Cineplex>();	
+	}
+	public void setCustomer(Customer customer){
 		this.customer = customer;
 		if(customer == null)
 			 throw new IllegalArgumentException("Customer is null");
 	}
-	
-	public CinemaApp(Customer customer) {
-		this(customer, new ArrayList<Movie>(), new ArrayList<Cineplex>());
-	}
-
 	/**
 	 * Get all movie listing
 	 * @return array list of movie listing
@@ -144,7 +137,14 @@ public class CinemaApp extends AbstractCinemaApp{
 	 */
 	public ShowTime[] getShowTime(int cineplexIndex, int cinemaIndex, int year, int month, int date){
 		Cinema cinema = getCinema(cineplexIndex, cinemaIndex);
-		return cinema.getShowTime(year, month, date);
+		ShowTime[] showTime = cinema.getShowTime(year, month, date);
+		ArrayList<ShowTime> s = new ArrayList<ShowTime>();
+		for (ShowTime ss : showTime) {
+			if(ss.hasMovie())
+				s.add(ss);
+		}
+		ShowTime[] r = new ShowTime[s.size()];
+		return s.toArray(r);
 	}
 	/**
 	 * get the show time for the whole day for the cinema at specific hour
@@ -160,7 +160,11 @@ public class CinemaApp extends AbstractCinemaApp{
 		Cineplex cineplex = cineplexList.get(cineplexIndex);
 		ArrayList<ShowTime> shows = new ArrayList<ShowTime>();
 		for (Cinema c : cineplex.getCinemas()) {
-			shows.addAll(Arrays.asList(c.getShowTime()));
+			for (ShowTime showTime : c.getShowTime(year, month, date)) {
+				if(showTime.hasMovie())
+					shows.add(showTime);
+			}
+//			shows.addAll(Arrays.asList());
 		}
 		ShowTime[] s = new ShowTime[shows.size()];
 		return shows.toArray(s);
@@ -174,7 +178,11 @@ public class CinemaApp extends AbstractCinemaApp{
 		
 		for (Cineplex cineplex : cineplexList) {
 			for (Cinema cinema : cineplex.getCinemas()) {
-				showTimes.addAll(Arrays.asList(cinema.getShowTime()));
+				for (ShowTime showTime : cinema.getShowTime()) {
+					if(showTime.hasMovie())
+						showTimes.add(showTime);
+				}
+//				showTimes.addAll(Arrays.asList(cinema.getShowTime()));
 			}
 		}
 		ShowTime[] result = new ShowTime[showTimes.size()];

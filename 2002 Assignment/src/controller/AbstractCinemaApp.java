@@ -8,6 +8,7 @@ import model.cinema.Cineplex;
 import model.cinema.seat.Seat;
 import model.cinema.seat.Seat.SeatOccupiedException;
 import model.cinema.showtime.ShowTime;
+import model.customer.Customer;
 import model.customer.User.UserNotLoggedInException;
 import model.movie.Genre;
 import model.movie.Language;
@@ -16,6 +17,13 @@ import model.movie.Rating;
 import model.movie.Status;
 
 public abstract class AbstractCinemaApp {
+	/**
+	 * Get all movie listing
+	 * @return array list of movie listing
+	 */
+	public void setCustomer(Customer customer){
+		throw new UnsupportedOperationException();
+	}
 	/**
 	 * Get all movie listing
 	 * @return array list of movie listing

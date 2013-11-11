@@ -19,6 +19,10 @@ public class PlatinumSuiteCinema extends Cinema{
 		return priceRate;
 	}
 	
+	public CinemaType getType(){
+		return CinemaType.PLATINUM_SUITE; 
+	}
+	
 	private class Seats extends SeatAllocation{
 		private Seats(Cinema cinema){
 			this.cinema = cinema;

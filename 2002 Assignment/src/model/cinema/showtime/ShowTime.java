@@ -1,5 +1,6 @@
 package model.cinema.showtime;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,6 +17,9 @@ public class ShowTime{
 	private final double MIDNITE_RATE = 0.8;
 	private final double WEEKEND_RATE = 1.4;
 	private double priceRate;
+
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM YYYY");
+	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mmaa");
 	
 	public ShowTime(Date startTime, Date endTime, Cinema cinema) {
 		this(startTime, endTime, null, cinema);
@@ -85,9 +89,11 @@ public class ShowTime{
 	public SeatAllocation getSeatAllocations() {
 		return seatAllocations;
 	}
+	
+	
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("ShowTime: " + startTime + "-"+ endTime + "\n");
+		StringBuffer sb = new StringBuffer("ShowTime: " + String.format("%s, %s - %s", dateFormat.format(startTime), timeFormat.format(startTime), timeFormat.format(endTime)) + "\n");
 		sb.append("Movie: " + ((movie != null) ? movie.getTitle() : "<None>") + "\n");
 		sb.append("Cinema: " + cinema.getId() + "\n");
 		return sb.toString();

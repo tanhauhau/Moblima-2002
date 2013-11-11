@@ -6,7 +6,6 @@ import model.cinema.Cinema;
 import model.cinema.Cineplex;
 import model.cinema.PlatinumSuiteCinema;
 import model.cinema.showtime.ShowTime;
-import model.customer.Customer;
 import model.movie.Genre;
 import model.movie.Language;
 import model.movie.Movie;
@@ -15,14 +14,6 @@ import model.movie.Status;
 
 public class AdminCinemaApp extends CinemaApp{
 
-	public AdminCinemaApp(Customer customer) {
-		super(customer);
-	}
-	public AdminCinemaApp(Customer customer, ArrayList<Movie> movie,
-			ArrayList<Cineplex> cineplex) {
-		super(customer, movie, cineplex);
-	}
-	
 	/*
 	 * Movies
 	 */
@@ -39,6 +30,14 @@ public class AdminCinemaApp extends CinemaApp{
 	 * @param index index of the movie in the arraylist
 	 */
 	public void removeMovie(int index){
+		Movie movie = movieList.get(index);
+		ArrayList<ShowTime> s = movie.getShowTimes();
+		ShowTime[] st = new ShowTime[s.size()];
+		st = s.toArray(st);
+		for (int i = 0; i < st.length; i++) {
+			movie.removeShowTime(st[i]);
+			st[i].setMovie(null);
+		}
 		movieList.remove(index);
 	}
 	/**
@@ -134,7 +133,6 @@ public class AdminCinemaApp extends CinemaApp{
 		Cineplex cineplex = cineplexList.get(cineplexIndex);
 		Cinema cinema = cineplex.getCinemas().get(cinemaIndex);
 		cineplex.removeCinema(cinema);
-		cinema.remove();
 	}
 	/**
 	 * change the cinema id

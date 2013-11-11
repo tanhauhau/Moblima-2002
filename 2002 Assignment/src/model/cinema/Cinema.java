@@ -50,9 +50,8 @@ public class Cinema {
 	public ShowTime[] getShowTime(){
 		return showTimetable.getShowTime();
 	}	
-	
-	public void remove(){
-		this.cineplex = null;
+	public CinemaType getType(){
+		return CinemaType.NORMAL; 
 	}
 	
 	private class Seats extends SeatAllocation{
@@ -64,7 +63,7 @@ public class Cinema {
 				this.seats[i] = new Seat(String.valueOf(i));
 			}
 			for (int i = 40; i < 50; i++) {
-				this.seats[i] = new PremiumSeat(String.valueOf(i));
+				this.seats[i] = new PremiumSeat("Premium - " + String.valueOf(i));
 			}
 		}
 	}

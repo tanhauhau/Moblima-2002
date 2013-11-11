@@ -46,7 +46,6 @@ public class User{
 		userList = users;
 		currentUser = null;
 	}
-
 //	public static void initialize(){
 //		userList = new ArrayList<User>();
 //		storage = new UserStorageHandler(userList);
@@ -107,6 +106,9 @@ public class User{
 	}
 	public boolean isAdmin(){
 		return isAdmin;
+	}
+	public String getPassword(){
+		return password;
 	}
 	
 	public Customer getCustomer(String name){
