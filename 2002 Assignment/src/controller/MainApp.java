@@ -18,6 +18,7 @@ public class MainApp implements Saveable{
 		IView view;
 		view = new ConsoleView();
 //		view = new GraphicView();
+		view.setSavable(this);
 		
 		//read from storage
 		storage = new StorageApp();

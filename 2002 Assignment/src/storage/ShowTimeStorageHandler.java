@@ -12,7 +12,6 @@ import model.cinema.seat.Seat.SeatOccupiedException;
 import model.cinema.showtime.ShowTime;
 import model.customer.Customer;
 import model.customer.User;
-import model.customer.User.LoginFailedException;
 import model.customer.User.UserNotLoggedInException;
 import model.movie.Movie;
 import controller.AbstractCinemaApp;
@@ -36,22 +35,14 @@ public class ShowTimeStorageHandler extends StorageHandler{
 	@Override
 	public void loadData() {
 		lineCount = 0;
-		User user;
-		String name = "", password = "";
+		User user = null;
 		try {
 			user = loginApp.getCurrentUser();
-			name = user.getCustomer().getName();		
-			password = user.getPassword();
 		}catch (UserNotLoggedInException e) {
 		}
 		super.loadData();
-		try {
-			loginApp.logout();
-			if(!name.isEmpty())
-				loginApp.login(name, password);
-		} catch (LoginFailedException | UserNotLoggedInException e) {
-			e.printStackTrace();
-		}
+		if(user != null)
+			cinemaApp.setCustomer(user.getCustomer());
 	}
 	
 	@Override
@@ -82,12 +73,10 @@ public class ShowTimeStorageHandler extends StorageHandler{
 			if(occupied){
 				try {
 					int customerIndex = Integer.parseInt(st.nextToken());
-					loginApp.logout();
 					User user = loginApp.getUserList().get(customerIndex);
-					loginApp.login(user.getCustomer().getName(), user.getPassword());
+					cinemaApp.setCustomer(user.getCustomer());
 					cinemaApp.purchaseSeat(showtime, seatIndex);
-					loginApp.logout();
-				} catch (LoginFailedException | UserNotLoggedInException | IndexOutOfBoundsException | SeatOccupiedException e) {
+				} catch (UserNotLoggedInException | IndexOutOfBoundsException | SeatOccupiedException e) {
 				}
 			}
 			lineCount --;
@@ -97,7 +86,7 @@ public class ShowTimeStorageHandler extends StorageHandler{
 	@Override
 	protected String getDataToWrite() {
 		//time -> y,m,d,h
-		/* cinplexindex, cinemaindex, movieindex, starttime, endtime, numberofseats
+		/* cinplexindex, cinemaindex, movieindex, starttime, numberofseats
 		 * <seat> -> seatindex, customerindex, ticketid, ticketprice
 		 * */
 		StringBuffer sb = new StringBuffer();
