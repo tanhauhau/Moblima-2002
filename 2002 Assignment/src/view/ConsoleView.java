@@ -3,6 +3,8 @@ package view;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import storage.Saveable;
+
 import model.Ticket;
 import model.cinema.Cinema;
 import model.cinema.Cineplex;
@@ -21,7 +23,7 @@ import model.movie.Status;
 import controller.AbstractCinemaApp;
 import controller.LoginApp;
 
-public class ConsoleViewApp implements IViewApp {
+public class ConsoleView implements IView {
 	
 	private final static int CHOICE_LOGIN_LOGIN = 1;
 	private final static int CHOICE_LOGIN_REGISTER = 2;
@@ -55,8 +57,9 @@ public class ConsoleViewApp implements IViewApp {
 	
 	private Scanner in;
 	private AbstractCinemaApp cinemaApp;
+	private Saveable saveable;
 	
-	public ConsoleViewApp() {
+	public ConsoleView() {
 		in = new Scanner(System.in);
 	}
 	
@@ -73,6 +76,9 @@ public class ConsoleViewApp implements IViewApp {
 			} catch (ExitException e) {
 				break;
 			}
+		}
+		if(saveable != null){
+			saveable.save();
 		}
 	}
 
@@ -242,8 +248,16 @@ public class ConsoleViewApp implements IViewApp {
 				updateCinema();
 				break;
 			case CHOICE_STAFF_REVENUE_CINEPLEX:
+				reportByCineplex();
+				holdOn();
+				break;
 			case CHOICE_STAFF_REVENUE_PERIOD:
+				reportByPeriod();
+				holdOn();
+				break;
 			case CHOICE_STAFF_REVENUE_MOVIE:
+				reportByMovie();
+				holdOn();
 				break;
 			case CHOICE_STAFF_EXIT:
 				throw new ExitException();
@@ -364,7 +378,14 @@ public class ConsoleViewApp implements IViewApp {
 				while(true){
 					int seatIndex = chooseSeat(seats);
 					try {
-						cinemaApp.purchaseSeat(showtime, seatIndex);
+						Ticket ticket = cinemaApp.purchaseSeat(showtime, seatIndex);
+						print("Your booking is successful.");
+						print("Your Ticket: ");
+						print(ticket.toString());
+						print(String.format("Total: %f", ticket.getPrice()));
+						print("");
+						holdOn();
+						
 						return;
 					}catch(SeatOccupiedException e){
 						if(!yes_or_no("Choose again")){
@@ -476,6 +497,23 @@ public class ConsoleViewApp implements IViewApp {
 		int cineplexIndex = chooseCineplex();
 		cinemaApp.updateCinema(cineplexIndex, chooseCinema(cineplexIndex), getInputString("New id: "));
 		print("Cinema successfully updated");		
+	}
+	
+	private void reportByCineplex(){
+		print(cinemaApp.getSalesReportByCineplex());
+	}
+	private void reportByPeriod() throws ExitException{
+		print("Please choose: ");
+		print("1. By Day");
+		print("2. By Month");
+		int choice = getInputInteger("Choice: ", 1, 2);
+		if(choice == 1)
+			print(cinemaApp.getSalesReportByDay());
+		else
+			print(cinemaApp.getSalesReportByMonth());
+	}
+	private void reportByMovie(){
+		print(cinemaApp.getSalesReportByMovie());
 	}
 	
 	/*
@@ -726,7 +764,13 @@ public class ConsoleViewApp implements IViewApp {
 		print("<Press ENTER key to continue>");
 		in.nextLine();
 	}
+	
 	class ExitException extends Exception{
 		private static final long serialVersionUID = 1L;
+	}
+
+	@Override
+	public void setSavable(Saveable saveable) {
+		this.saveable = saveable;
 	}
 }

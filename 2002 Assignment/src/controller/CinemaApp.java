@@ -402,9 +402,11 @@ public class CinemaApp extends AbstractCinemaApp{
 		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 		for (ShowTime showtime : showtimes) {
 			for (Seat seat : showtime.getSeatAllocations().getAllSeats()) {
-				Ticket ticket = seat.getTicket();
-				if(ticket.getCustomer().equals(customer)){
-					tickets.add(ticket);
+				if(seat.isOccupied()){
+					Ticket ticket = seat.getTicket();
+					if(ticket.getCustomer().equals(customer)){
+						tickets.add(ticket);
+					}
 				}
 			}
 			

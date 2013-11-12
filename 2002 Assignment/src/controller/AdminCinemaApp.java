@@ -1,10 +1,15 @@
 package controller;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Hashtable;
 
+import model.Ticket;
 import model.cinema.Cinema;
 import model.cinema.Cineplex;
 import model.cinema.PlatinumSuiteCinema;
+import model.cinema.seat.Seat;
 import model.cinema.showtime.ShowTime;
 import model.movie.Genre;
 import model.movie.Language;
@@ -224,19 +229,132 @@ public class AdminCinemaApp extends CinemaApp{
 	 */
 
 	public String getSalesReportByMovie(){
-		//TODO yet to be implemented
-		return null;
+		double[] profit = new double[movieList.size()];
+		int[] ticketSold = new int[movieList.size()];
+		
+		for (int i = 0; i < movieList.size(); i++) {
+			profit[i] = 0.0;
+			ticketSold[i] = 0;
+		}
+				
+		ShowTime[] showtimes = getShowTime();
+		for (ShowTime showtime : showtimes) {
+			for (Seat seat : showtime.getSeatAllocations().getAllSeats()) {
+				if(seat.isOccupied()){
+					Ticket ticket = seat.getTicket();
+					Movie movie = ticket.getShowTime().getMovie();
+					int movieIndex = movieList.indexOf(movie);
+					profit[movieIndex] += ticket.getPrice();
+					ticketSold[movieIndex] ++;
+				}
+			}
+			
+		}
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < movieList.size(); i++) {
+			sb.append("Movie: ").append(movieList.get(i).getTitle()).append(System.lineSeparator());
+			sb.append("Ticket Sold: ").append(ticketSold[i]).append(System.lineSeparator());
+			sb.append("Profit: ").append(String.format("%.2f", profit[i])).append(System.lineSeparator());
+		}
+		return sb.toString();
 	}
 	public String getSalesReportByCineplex(){
-		//TODO yet to be implemented
-		return null;
+		Hashtable<Cinema, Double> profit = new Hashtable<Cinema, Double>();
+		Hashtable<Cinema, Integer> ticketSold = new Hashtable<Cinema, Integer>();
+		
+		ShowTime[] showtimes = getShowTime();
+		for (ShowTime showtime : showtimes) {
+			for (Seat seat : showtime.getSeatAllocations().getAllSeats()) {
+				if(seat.isOccupied()){
+					Ticket ticket = seat.getTicket();
+					Cinema cinema = ticket.getShowTime().getCinema();
+					if(profit.containsKey(cinema)){
+						profit.put(cinema, profit.get(cinema) + ticket.getPrice());
+						ticketSold.put(cinema, ticketSold.get(cinema) + 1);
+					}else{
+						profit.put(cinema, ticket.getPrice());
+						ticketSold.put(cinema, 1);
+					}
+				}
+			}
+		}
+		StringBuffer sb = new StringBuffer();
+		double p;
+		int count;
+		for (Cineplex cineplex : cineplexList) {
+			sb.append("Cineplex: ").append(cineplex.getName()).append(System.lineSeparator());
+			count = 0;
+			p = 0;
+			for (Cinema cinema : cineplex.getCinemas()) {
+				if(profit.containsKey(cinema)){
+					sb.append("Cinema: ").append(cinema.getId()).append(System.lineSeparator())
+					.append("Ticket Sold: ").append(ticketSold.get(cinema)).append(System.lineSeparator())
+					.append("Profit: ").append(String.format("%.2f", profit.get(cinema))).append(System.lineSeparator());
+					count += ticketSold.get(cinema);
+					p += profit.get(cinema);
+				}
+			}
+			sb.append("Total Ticket Sold: ").append(count).append(System.lineSeparator())
+			.append("Total Profit: ").append(String.format("%.2f", p)).append(System.lineSeparator()).append(System.lineSeparator());
+		}
+		return sb.toString();
 	}
 	public String getSalesReportByMonth(){
-		//TODO yet to be implemented
-		return null;
+		StringBuffer sb = new StringBuffer();
+		int year = 2013;
+		for (int month = 0; month < 12; month++) {
+			double profit = 0.0;
+			int ticketSold = 0;
+			for (ShowTime showtime : getShowTime()) {
+				Calendar c = Calendar.getInstance();
+				c.setTime(showtime.getStartTime());
+				if(c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month){
+					for (Seat seat : showtime.getSeatAllocations().getAllSeats()) {
+						if(seat.isOccupied()){
+							Ticket ticket = seat.getTicket();
+							profit += ticket.getPrice();
+							ticketSold ++;
+						}
+					}
+				}
+			}
+			if(ticketSold != 0){
+				sb.append("Year: ").append(year).append(System.lineSeparator());
+				sb.append("Month: ").append(new DateFormatSymbols().getMonths()[month-1]).append(System.lineSeparator());
+				sb.append("Profit: ").append(String.format("%.2f", profit)).append(System.lineSeparator());
+				sb.append("Ticket Sold: ").append(ticketSold).append(System.lineSeparator());
+			}
+		}
+		return sb.toString();
 	}
 	public String getSalesReportByDay(){
-		//TODO yet to be implemented
-		return null;
-	} 
+		StringBuffer sb = new StringBuffer();
+		int year = 2013;
+		for (int month = 10; month < 11; month++) {
+			for (int day = 1; day <= 31; day++) {
+				double profit = 0.0;
+				int ticketSold = 0;
+				for (ShowTime showtime : getShowTime()) {
+					Calendar c = Calendar.getInstance();
+					c.setTime(showtime.getStartTime());
+					if(c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month && c.get(Calendar.DATE) == day){
+						for (Seat seat : showtime.getSeatAllocations().getAllSeats()) {
+							if(seat.isOccupied()){
+								Ticket ticket = seat.getTicket();
+								profit += ticket.getPrice();
+								ticketSold ++;
+							}
+						}
+					}
+				}
+				if(ticketSold != 0){
+					sb.append("Year: ").append(year).append(System.lineSeparator());
+					sb.append(day).append(" ").append(new DateFormatSymbols().getMonths()[month-1]).append(System.lineSeparator());
+					sb.append("Profit: ").append(String.format("%.2f", profit)).append(System.lineSeparator());
+					sb.append("Ticket Sold: ").append(ticketSold).append(System.lineSeparator());
+				}
+			}
+		}
+		return sb.toString();
+	}
 }
